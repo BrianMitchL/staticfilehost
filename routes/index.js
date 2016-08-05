@@ -22,16 +22,22 @@ router.get('/', function(req, res, next) {
           var tempFile = JSON.parse(data);
           var sizeInBytes = fs.statSync(p+'/'+tempFile['filename'])['size'];
           tempFile['filesize'] = filesize(sizeInBytes).human('si');
+          if (tempFile['filename'] in req.app.locals.stats) {
+            tempFile['downloads'] = req.app.locals.stats[tempFile['filename']];
+          } else {
+            tempFile['downloads'] = 0;
+          }
           jsons.push(tempFile);
         });
-        console.log("%s (%s)", file, path.extname(file));
+        console.log('Found %s', file);
       }
     });
   },
     res.render('index', {
       title: 'LAN Party Resources',
       subtitle: 'Games and other resources to alleviate our time distributing files.',
-      description: 'Each file <em>should</em> contain instruction on how to install.',
+      description: 'Each file <em>should</em> contain instructions on how to install.',
+      bandwidth: 'We have served ' + filesize(req.app.locals.stats['bandwidth']).human('si') + ' since ' + req.app.locals.stats['startup'].toLocaleString(),
       files: jsons
     })
   );

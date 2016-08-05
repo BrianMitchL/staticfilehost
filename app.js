@@ -4,10 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var fs = require('fs');
 
 var routes = require('./routes/index');
 
 var app = express();
+
+app.locals.stats = {'bandwidth': 0, 'startup': new Date()};
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,6 +22,17 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.get('/files/:file', function (req, res, next) {
+  if (req.params.file in app.locals.stats) {
+    app.locals.stats[req.params.file] += 1;
+  } else {
+    app.locals.stats[req.params.file] = 1;
+  }
+  app.locals.stats['bandwidth'] += fs.statSync(path.join(__dirname, 'public/files/'+req.params.file))['size'];
+  console.log(app.locals.stats);
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
