@@ -38,7 +38,9 @@ router.get('/', function(req, res, next) {
       subtitle: 'Games and other resources to alleviate our time distributing files.',
       description: 'Each file <em>should</em> contain instructions on how to install.',
       bandwidth: 'We have served ' + filesize(req.app.locals.stats['bandwidth']).human('si') + ' since ' + req.app.locals.stats['startup'].toLocaleString(),
-      files: jsons
+      files: jsons.sort(function(a, b) {
+          return a.title.localeCompare(b.title);
+      })
     })
   );
 });
