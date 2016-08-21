@@ -3,8 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "lint": "./node_modules/.bin/eslint ./routes/*.js ./bin/www ./app.js",
     "start": "node ./bin/www"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrianMitchL/staticfilehost.git"
+  },
+  "author": "Brian Mitchell <bman4789@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/BrianMitchL/staticfilehost/issues"
+  },
+  "homepage": "https://github.com/BrianMitchL/staticfilehost#readme",
   "dependencies": {
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
@@ -12,7 +22,9 @@
     "express": "~4.13.4",
     "file-size": "^1.0.0",
     "hbs": "~4.0.0",
-    "morgan": "~1.7.0",
-    "serve-favicon": "~2.3.0"
+    "morgan": "~1.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.3.1"
   }
 }
